@@ -5,6 +5,7 @@ Do you love brainfuck but also never use it because you value your braincells? W
 
 We bring to you simple, scalable brainfuck! Ok no. That was a lie to get your attention. But it worked didn't it? I mean if you're reading this it either worked or you're mentally deranged. Probably from too much brainfuck. That is a problem we will fix.
 
+
 ## What is it?
 Brainfuck but with functions.
 
@@ -15,6 +16,7 @@ The syntax is minimalistic, simple and impractical, following the fundamentals o
 However, unlike many features of brainfuck, it is a powerful and versatile tool which makes the language more high level. Not a lot more, but it actually allows you to solve more complex problems with brainfuck, in a style that is still quintessential brainfuck. Not brainfucking bad if I'd say so myself.
 
 So let's jump into the syntax.
+
 
 ## The Commands
 This table provides a very basic overview of the 12 commands involved (including the 8 commands from original brainfuck), so for a more in-depth guide and in order to understand the exact behaviour of each command, keep reading.
@@ -37,6 +39,7 @@ Functions are wrapped with curly brackets: `{}`
 Code stored inside uses its own local memory space, or local scope.
 
 Functions can't interact with the console - they can only take parameters and return values. The only exception to this rule is with the `.` command, which we'll elaborate on later.
+
 
 ### Taking Parameters
 Parameters are input into the function with `,`
