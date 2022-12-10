@@ -63,7 +63,9 @@ Functions can return values with `.`.
 
 Much like with the parameters, any number of values can be output and this is done so dynamically. For example, by modifying our code from above, we can do this:
 
-```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,+.<+]}```
+```brainfuck
+{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,+.<+]}
+```
 
 In which each parameter other than the first (which determines the number of parameters) is incremented by 1 and then returned.
 
@@ -79,7 +81,9 @@ Arguments are passed to the function call with `.`.
 
 Arguments can be passed dynamically to the function much like they are retrieved. For example, making use of our function from earlier:
 
-```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,<+]}>+++>+>+>+<<<<(>.>[.>])```
+```brainfuck
+{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,<+]}>+++>+>+>+<<<<(>.>[.>])
+```
 
 This code simply stores the function, 3, 1, 1 and 1 in the memory. Then the function is called and the first argument is introduced `3`. This parameter tells the function how many more arguments to accept (3). The function call loops through the modular memory and passes every value in the (not yet) covered memory to the function till it hits 0. There are 3 more values in the memory till 0, the exact number of values our function demands, so these values (1, 1 and 1) are passed to the function.
 
@@ -92,7 +96,9 @@ Returned values are retrieved from the function with `,`.
 
 As with every other feature of brainfuck functions, returned values are handled with their own little snippet of brainfuck code which allows the most control over data that brainfuck has to offer. For example:
 
-```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,+.<+]}}>+++>+>+>+<<<<(>.>[.>]+[>,])```
+```brainfuck
+{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,+.<+]}}>+++>+>+>+<<<<(>.>[.>]+[>,])
+```
 
 Basically, returned values are saved in their own little memory space/array which is appended to by the function each time `.` is used within the function and is stored to modular memory each time `,` is used within the function call. Each time a returned value is pulled from the function, the pointer of the returned array is incremented by one, and the next time `,` is used within the function call, the next returned value is pulled. Not all returned values have to be pulled and if there are more pulls than returns, 0 gets pulled. So if (in this example) the fourth returned value is requested but only 3 values are returned by the function, the fourth value returned will be 0. In our example, this will end the loop, so all values returned by the function (1,1,1) will be saved to the modular memory till one of these values is 0.
 
@@ -114,7 +120,9 @@ Taking inputs at a modular level with `,` in a cell where a function exists will
 ### Decorators
 `+` and `-` can serve somewhat as decorators for the function, in the sense that they modify the values returned by the function. `+` being used on a function (not a function call, remember) means that later when a function is called, `+` will be used on every value returned by a function. So, for example, we have a function that returns 1, 2 and 3. Using `+` on this function means that when its called, it will return 2, 3 and 4 instead. Below is a demonstration.
 
-```{+.>++.>+++.}+```
+```brainfuck
+{+.>++.>+++.}+
+```
 
 `-` does the same as `+` when acting on a function, but it subtracts 1 instead of adding 1.
 
@@ -122,15 +130,22 @@ The real use of this decorator idea is when functions are used to decorate other
 
 When one function is written on top of another, each time the resulting function is called only the top layer function is called, but the top function is modified in the sense that it's first few parameter are replaced by the returned values of the function it decorates. The decorated function's parameters are input first. What we get is a combination of both functions. So if we have one function that doubles a number:
 
-```{,[->+>+<<]>[->+<]>.}```
+```brainfuck
+{,[->+>+<<]>[->+<]>.}
+```
 
 and another function on top of this that triples a given argument
 
-```{,[->+>+>+<<<]>[->+<]>[->+<]>.}```
+```brainfuck
+{,[->+>+>+<<<]>[->+<]>[->+<]>.}
+```
 
 then these functions chained together with the tripling function on top will look like this
 
-```{,[->+>+<<]>[->+<]>.}{,[->+>+>+<<<]>[->+<]>[->+<]>.}```
+```brainfuck
+{,[->+>+<<]>[->+<]>.}{,[->+>+>+<<<]>[->+<]>[->+<]>.}
+```
+
 Our new function will calculate the triple of the values returned by our doubling function, so together they will return a given argument multiplied by 6.
 
 _The total number of parameters given to the decorated function =
@@ -168,7 +183,7 @@ print("Sum =", sum_two_numbers(a, b))
 ```
 
 <u>BrainFunctional</u>:
-```
+```brainfuck
 {,>,[-<+>]<.} sum_two_numbers 
 >--[----->+<]>---- "b" we can use - on this to convert it to "a"
 Because this is brainfuck, I will not store the strings "before Execution" and "after Execution", but will denote them with "b" and "a" instead. This letter will also be input to the hello decorator function for simplicity's sake.
@@ -238,4 +253,8 @@ The solution? The only possible, complete solution on the brainfunc side would b
 
 This is my final concern. Its one which is strickingly obvious to anyone who's read this far. Other than with the use of `.` on functions (a feature which has a relatively high likelyhood of being deleted) functions cannot meddle with mudular memory or the modular pointer. I doubt this will change, but it also stands as a major reason to continue with the use of `.` as a way to call functions.
 
-I am open to input on suggestions or criticisms, so please tell me what you think works best. In the form of brainfuck, I am `,[>,]`
+I am open to input on suggestions or criticisms, so please tell me what you think works best. In the form of brainfuck, I am 
+
+```brainfuck
+,[>,]
+```
