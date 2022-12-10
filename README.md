@@ -91,6 +91,7 @@ Returned values are retrieved from the function with `,`.
 As with every other feature of brainfuck functions, returned values are handled with their own little snippet of brainfuck code which allows the most control over data that brainfuck has to offer. For example:
 
 ```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,+.<+]}}>+++>+>+>+<<<<(>.>[.>]+[>,])```
+
 Basically, returned values are saved in their own little memory space/array which is appended to by the function each time `.` is used within the function and is stored to modular memory each time `,` is used within the function call. Each time a returned value is pulled from the function, the pointer of the returned array is incremented by one, and the next time `,` is used within the function call, the next returned value is pulled. Not all returned values have to be pulled and if there are more pulls than returns, 0 gets pulled. So if (in this example) the fourth returned value is requested but only 3 values are returned by the function, the fourth value returned will be 0. In our example, this will end the loop, so all values returned by the function (1,1,1) will be saved to the modular memory till one of these values is 0.
 
 Returned values can replace a function in the memory and the function will still run. The function will only cease to exist after the function call is complete. However note that the function will not exist in the modular memory, so it will not be callable again within the function call and it can't be passed to the function as a parameter (allowing recursion) if it is deleted first.
@@ -187,7 +188,7 @@ Note that if one function is cut and then another is function is cut, the first 
 
 Here is the example from above rewritten so that the hello_decorator decorator can also be used on a function to double inputs (called doubler):
 
-```
+```bf
 {,>,[-<+>]<.} sum_two_numbers 
 >--[----->+<]>---- "b" we can use - on this to convert it to "a"
 Because this is brainfuck, I will not store the strings "before Execution" and "after Execution", but will denote them with "b" and "a" instead. This letter will also be input to the hello decorator function for simplicity's sake.
