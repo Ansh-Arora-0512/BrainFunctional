@@ -5,7 +5,6 @@ Do you love brainfuck but also never use it because you value your braincells? W
 
 We bring to you simple, scalable brainfuck! Ok no. That was a lie to get your attention. But it worked didn't it? I mean if you're reading this it either worked or you're mentally deranged. Probably from too much brainfuck. That is a problem we will fix.
 
-
 ## What is it?
 Brainfuck but with functions.
 
@@ -16,7 +15,6 @@ The syntax is minimalistic, simple and impractical, following the fundamentals o
 However, unlike many features of brainfuck, it is a powerful and versatile tool which makes the language more high level. Not a lot more, but it actually allows you to solve more complex problems with brainfuck, in a style that is still quintessential brainfuck. Not brainfucking bad if I'd say so myself.
 
 So let's jump into the syntax.
-
 
 ## The Commands
 This table provides a very basic overview of the 12 commands involved (including the 8 commands from original brainfuck), so for a more in-depth guide and in order to understand the exact behaviour of each command, keep reading.
@@ -31,19 +29,22 @@ Command | Description
 `,`	| Input a character and store it in the cell at the pointer
 `[`	| Jump past the matching `]` if the cell at the pointer is 0 (functions are considered to be nonzero)
 `]`	| Jump back to the matching `[` if the cell at the pointer is nonzero
-
+`{` | Indicates the start of a function. Functions are treated as objects and stored in the memory
+`}` | Indicates the end of a function. Within functions, special rules apply to the `.` and `,` commands
+`(` | Indicates the start of a function call. Within function calls, special rules apply to the `.` and `,` commands
+`)` | Indicates the end of a function call
+`/` | "Cuts" a function, deleting it and allowing it to be moved elsewhere in the memory
+`*` | "Pastes" a function, allowing it to be stored in that position in the memory
 
 ## Defining a Function
-Functions are wrapped with curly brackets: `{}`
+Functions are wrapped with curly brackets: `{}`.
 
 Code stored inside uses its own local memory space, or local scope.
 
 Functions can't interact with the console - they can only take parameters and return values. The only exception to this rule is with the `.` command, which we'll elaborate on later.
 
-
 ### Taking Parameters
-### Taking Parameters
-Parameters are input into the function with `,`
+Parameters are input into the function with `,`.
 
 There is no limit to the number of parameters accepted by the function, they can even be accepted dynamically using code such as this: 
 
@@ -53,3 +54,13 @@ In which the first parameter decides how many parameters will be required by the
 
 Since functions have their own local scope, `,` determines where parameters are stored in the function, as if the function were a normal piece of brainfuck code and the parameters were `stdin`.
 
+### Returning values (or functions)
+Functions can return values with `.`.
+
+Much like with the parameters, any number of values can be output and this is done so dynamically. For example, by modifying our code from above, we can do this:
+
+```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,+.<+]}```
+
+In which each parameter other than the first (which determines the number of parameters) is incremented by 1 and then returned.
+
+## Calling Functions
