@@ -50,7 +50,7 @@ Parameters are input into the function with `,`.
 
 There is no limit to the number of parameters accepted by the function, they can even be accepted dynamically using code such as this: 
 
-```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,<+]}```
+```brainfuck {->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,<+]}```
 
 In which the first argument decides how many parameters will be required by the function.
 
