@@ -8,7 +8,7 @@ We bring to you simple, scalable brainfuck! Ok no. That was a lie to get your at
 ## What is it?
 Brainfuck but with functions.
 
-If you have no idea what brainfuck is but for some reason are still reading this, here is a [wikepedia article](https://en.wikipedia.org/wiki/Brainfuck) explaining the fundamentals of the esoteric programming language. I will not be exploring how to use brainfuck or going over it in this guide, so if you don't understand some of the examples given or want another guide on the language, here is a [tutorial](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a) by @roachhd, which covers some of the fundamentals quite well.
+If you have no idea what brainfuck is but for some reason are still reading this, here is a [wikepedia article](https://en.wikipedia.org/wiki/Brainfuck) explaining the fundamentals of the esoteric programming language. I will not be exploring how to use brainfuck or going over it in this guide, so if you don't understand some of the examples given or want another guide on the language, here is a [tutorial](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a) by @roachhd , which covers some of the fundamentals quite well.
 
 The syntax is minimalistic, simple and impractical, following the fundamentals of the language.
 
