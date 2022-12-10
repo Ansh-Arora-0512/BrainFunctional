@@ -16,8 +16,10 @@ However, unlike many features of brainfuck, it is a powerful and versatile tool 
 
 So let's jump into the syntax.
 
+By the way, if you haven't figured it out yet, the only reason I use the horrible name "BrainFunctional" is because [Brainfunc]([url](https://esolangs.org/wiki/Brainfunc)) and [Brainfunction]([url](https://github.com/ryanfox/brainfunction)) already exist.
+
 ## The Commands
-This table provides a very basic overview of the 12 commands involved (including the 8 commands from original brainfuck), so for a more in-depth guide and in order to understand the exact behaviour of each command, keep reading.
+This table provides a very basic overview of the 14 commands involved (including the 8 commands from original brainfuck), so for a more in-depth guide and in order to understand the exact behaviour of each command, keep reading.
 
 Command | Description
 --- | ---
@@ -207,3 +209,30 @@ The returned values are stored in the memory and output, printing "b10a" to the 
 
 Note that in this example "3" and "10" won't really be output due to the way outputs are handled in brainfuck. Instead chr(3) (the third character on the ascii table) and chr(10) (the tenth character on the ascii table) will be output (both chr(3) and chr(10) are not actually characters, so nothing will be output), but I commented "3" and "10" for simplicity's sake.
 ```
+
+## Thoughts and Concerns
+The interactions of `.`, `-` and `+` with functions is an idea I am unsure of. It adds to the versatility of functions and makes them more interactive, but it feels quintessentially unbrainfucky (yes I just made that word up). This feeling arises from the idea that the base brainfuck funtions can perform 2 completely different tasks. This idea just doesn't sit well with classic brainfuck. This is my biggest concern.
+
+2 other alternatives could be that these operations do nothing when acting on a functions, or that they raise an error.
+
+The overall implementation of decorators is a rocky idea, since decorators are a higher level concept used in object oriented programming. Brainfuck is most definitely not high-level or object oriented, though functions are considered as objects in brainfunc and are handled in a way that is at least somewhat object oriented. But including decorators when there isn't even an implementation for classes? Of course, implementing classes to brainfuck will change the language immeasurably and completely break away from it. Class objects are probably the most unbrainfucky idea anyone could come up with, so there is no way BrainFunctional will include them or anything similar.
+
+The pros of implementing decorators is that - unlike in other languages where they don't serve too much purpose (and are a little like syntactic sugar) - in BrainFunctional (due to the low-level handling of functions), decorators actually serve a unique role, and without their existence there is no real way to implement what they do in a versatile and dynamic manner. Therefore I feel like they have to stay.
+
+The syntax for decorators however is not as clear of a concept. Decorators are designed in brainfuck in such a way that they can be used as decorators but also as normal functions. However from this a massive conflict occurs in the handling of parameters and returned values in decorated functions. This is probably my second biggest concern here.
+
+The decorator, when used as a decorator, handles the top level of parameters and returns. Its first argument is ignored and is instead considered to be the decorated function (bottom-level function) as it is being run. So our `hello_decorator` function from above takes 2 arguments, the first being the function it decorates or the value it wraps with `"b"` and `"a"`. The second argument is the letter `"b"` (or potentially another letter), allowing the function to surround an output with a before and an after. In the examples I gave, all the functions wrapped by `hello_decorator` only returned one value which could easily be taken as the argument `hello_decorator` has to surround. But what if there were multiple outputs from the base function? Would `hello_decorator` take one input for each output from the base function? This seems like the only way to handle our situation. But this restricts the use of `hello_decorator` as both a function and decorator, since the programmer will have to know how many values hello decorator takes from a base function. This means that it may have to be designed as a custom decorator for a single function, therefore, in a way, destroying the need for a decorator in the first place.
+
+Decorator functions in our implementation do take one input for each output from the decorated function, resulting in the formula above:
+_The total number of parameters given to the decorated function =
+the number of parameters accepted by the decorated function - the number of values the decorated function returns + the number of parameters for the decorator_
+
+Taking a variable number of parameters till one of these paramters is 0 seems to be the solution that covers all fronts of this problem, but doing that is a) up to the programmer, and b) not very brainfucky. Still, it seems with the current brainfunc decorator implementation, that is the way to go. This does bring up our next problem though, which is a problem already present in normal brainfuck iteration but amplified in the case of BrainFunctional functions.
+
+If inputs and outputs for a function are controlled dynamically, based on `stdin` from the user, then the existence of 0 as a parameter or returned value from a function can break the overall handling of functions. Brainfuck iteration is designed to keep going till it hits 0, and usually this 0 signals the end of a data stream. This idea is very much the case with function parameters and returns, where, for a function to take and give an unkown quantity of data, it will have to loop in some way and this loop will inevitably be broken when it hits 0. But what if the 0 does not signal an end but rather is part of the data? In that case, you are doomed. This is a problem that is present in normal brainfuck already but is just made so much more deadly.
+
+The solution? The only possible, complete solution on the brainfunc side would be the implementation of a new kind of iteration, or more rigid, high-level parameter passing and returning system. Both of these options are just not happening. So programmers, you have to find ways to deal with data containing 0 and minimise this phenomenon.
+
+This is my final concern. Its one which is strickingly obvious to anyone who's read this far. Other than with the use of `.` on functions (a feature which has a relatively high likelyhood of being deleted) functions cannot meddle with mudular memory or the modular pointer. I doubt this will change, but it also stands as a major reason to continue with the use of `.` as a way to call functions.
+
+I am open to input on suggestions or criticisms, so please tell me what you think works best. In the form of brainfuck, I am `,[>,]`
