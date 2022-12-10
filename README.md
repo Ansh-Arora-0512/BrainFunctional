@@ -112,15 +112,98 @@ Taking inputs at a modular level with `,` in a cell where a function exists will
 ```{+.>++.>+++.}+```
 
 `-` does the same as `+` when acting on a function, but it subtracts 1 instead of adding 1.
-	• The real use of this decorator idea is when functions are used to decorate other functions, as is the case in higher level languages. In this case, if a function is written on top of another function, that function serves to decorate that function.
-	• When one function is written on top of another, each time the resulting function is called only the top layer function is called, but the top function is modified in the sense that it's first few parameter are replaced by the returned values of the function it decorates. The decorated function's parameters are input first. What we get is a combination of both functions. So if we have one function that doubles a number:
-{,[->+>+<<]>[->+<]>.}
-	and another function on top of this that triples a given parameter
-{,[->+>+>+<<<]>[->+<]>[->+<]>.}
-	then these functions chained together with the tripling function on top will look like this
-{,[->+>+<<]>[->+<]>.}{,[->+>+>+<<<]>[->+<]>[->+<]>.}
-	Our new function will calculate the triple of the values returned by our doubling function, so together they will return a given parameter multiplied by 6.
-	• The total number of parameters given to the decorated function =
-	the number of parameters accepted by the decorated function - the number of values the decorated function returns + the number parameters for the decorator.
-	• I will now translate the geeksforgeeks python decorators example using brainfuck (or should I say brainfunc?) instead.
-![image](https://user-images.githubusercontent.com/115102671/206873787-1a35d273-0105-49d3-87fd-a995d1584a76.png)
+
+The real use of this decorator idea is when functions are used to decorate other functions, as is the case in higher level languages. In the case of BrainFunctional, if a function is written on top of another function, that function serves to decorate the original function.
+
+When one function is written on top of another, each time the resulting function is called only the top layer function is called, but the top function is modified in the sense that it's first few parameter are replaced by the returned values of the function it decorates. The decorated function's parameters are input first. What we get is a combination of both functions. So if we have one function that doubles a number:
+
+```{,[->+>+<<]>[->+<]>.}```
+
+and another function on top of this that triples a given argument
+
+```{,[->+>+>+<<<]>[->+<]>[->+<]>.}```
+
+then these functions chained together with the tripling function on top will look like this
+
+```{,[->+>+<<]>[->+<]>.}{,[->+>+>+<<<]>[->+<]>[->+<]>.}```
+Our new function will calculate the triple of the values returned by our doubling function, so together they will return a given argument multiplied by 6.
+
+_The total number of parameters given to the decorated function =
+the number of parameters accepted by the decorated function - the number of values the decorated function returns + the number parameters for the decorator._
+
+I will now translate the [geeksforgeeks python decorators example]([url](https://www.geeksforgeeks.org/decorators-in-python/)) using BrainFunctional instead.
+
+<u>Python 3</u>:
+```python
+def hello_decorator(func):
+    def inner1(*args, **kwargs):
+         
+        print("before Execution")
+         
+        # getting the returned value
+        returned_value = func(*args, **kwargs)
+        print("after Execution")
+         
+        # returning the value to the original frame
+        return returned_value
+         
+    return inner1
+ 
+ 
+# adding decorator to the function
+@hello_decorator
+def sum_two_numbers(a, b):
+    print("Inside the function")
+    return a + b
+ 
+a, b = 1, 2
+ 
+# getting the value through return of the function
+print("Sum =", sum_two_numbers(a, b))
+```
+
+<u>BrainFunctional</u>:
+```
+{,>,[-<+>]<.} sum_two_numbers 
+>--[----->+<]>---- "b" we can use - on this to convert it to "a"
+Because this is brainfuck, I will not store the strings "before Execution" and "after Execution", but will denote them with "b" and "a" instead. This letter will also be input to the hello decorator function for simplicity's sake.
+
+<{,>,.<.>-.} @hello_decorator
+Here we create the hello decorator function and since it is on top of the sum_two_numbers function, it automatically decorates it. To create hello_decorator as an individual function, it needs to be stored elsewhere in the memory and cloned onto sum_two_numbers.
+
+(+.+.>.,>,>,)<<.>.>.
+Outputs the decorated function taking 1 and 2 as parameters.
+The python equivalent of this would be: print(sum_two_numbers(1, 2))
+```
+
+### Moving Functions in the Memory
+As you can see, the BrainFunctional version is a lot more simple and concise but with more brainfucking potential. Of course, you're not really going to be able to chain decorators or reuse decorators or use them practically using the methods shown above, since the decorator doesn't exist as a separate function in the memory - it is simply written on top of our original function to form a combination of the 2.
+
+To move functions around in the memory, I propose a copy-paste like mechanism with `/` being used to cut a function (delete it and copy it to a clipboard of sorts where it can be pasted to any other space in the memory at any time) and `*` to paste a function (place a function from the clipboard onto a spot in the memory as if the code for that function had been written there).
+
+Note that if one function is cut and then another is function is cut, the first function will be overwritten in (therefore removed from) the clipboard
+
+Here is the example from above rewritten so that the hello_decorator decorator can also be used on a function to double inputs (called doubler):
+
+```
+{,>,[-<+>]<.} sum_two_numbers 
+>--[----->+<]>---- "b" we can use - on this to convert it to "a"
+Because this is brainfuck, I will not store the strings "before Execution" and "after Execution", but will denote them with "b" and "a" instead. This letter will also be input to the hello decorator function for simplicity's sake.
+
+>{+[>>>,]<<<[<<<]>>>->>>[[->+>+<<]>[->+<]>.>]} doubler
+Accepts an unlimited number of parameters till a given parameter is equal to 0, and then returns the double of all parameters given
+
+>{,>,.<.>-.} hello_decorator
+/*<*<<*
+Clones hello_decorator on top of sum_two_numbers and doubler, causing it to act as a decorator for both
+
+(<+.+.-->>.<<,<,<,)>>.<.<.
+Calls sum_two numbers (after its been decorated), taking 1 and 2 as parameters. 
+The returned values are stored in the memory and output, printing "b3a" to the console.
+
+>>>>>(>>+++++.-----.<<<.>>>,>,>,)<<.>.>.
+Calls doubler (after its been decorated), taking 5 and 0 as parameters (the 0 tells doubler to stop taking parameters).
+The returned values are stored in the memory and output, printing "b10a" to the console.
+
+Note that in this example "3" and "10" won't really be output due to the way outputs are handled in brainfuck. Instead chr(3) (the third character on the ascii table) and chr(10) (the tenth character on the ascii table) will be output (both chr(3) and chr(10) are not actually characters, so nothing will be output), but I commented "3" and "10" for simplicity's sake.
+```
