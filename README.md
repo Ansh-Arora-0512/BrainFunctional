@@ -149,7 +149,7 @@ then these functions chained together with the tripling function on top will loo
 Our new function will calculate the triple of the values returned by our doubling function, so together they will return a given argument multiplied by 6.
 
 _The total number of parameters given to the decorated function =
-the number of parameters accepted by the decorated function - the number of values the decorated function returns + the number parameters for the decorator._
+the number of parameters accepted by the original function - the number of values the original function returns + the number parameters for the decorator._
 
 I will now translate the [geeksforgeeks python decorators example](https://www.geeksforgeeks.org/decorators-in-python/) using BrainFunctional instead.
 
@@ -243,7 +243,7 @@ The decorator, when used as a decorator, handles the top level of parameters and
 
 Decorator functions in our implementation do take one input for each output from the decorated function, resulting in the formula above:
 _The total number of parameters given to the decorated function =
-the number of parameters accepted by the decorated function - the number of values the decorated function returns + the number of parameters for the decorator_
+the number of parameters accepted by the original function - the number of values the original function returns + the number of parameters for the decorator_
 
 Taking a variable number of parameters till one of these paramters is 0 seems to be the solution that covers all fronts of this problem, but doing that is a) up to the programmer, and b) not very brainfucky. Still, it seems with the current brainfunc decorator implementation, that is the way to go. This does bring up our next problem though, which is a problem already present in normal brainfuck iteration but amplified in the case of BrainFunctional functions.
 
