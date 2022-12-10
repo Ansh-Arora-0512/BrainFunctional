@@ -42,6 +42,7 @@ Functions can't interact with the console - they can only take parameters and re
 
 
 ### Taking Parameters
+### Taking Parameters
 Parameters are input into the function with `,`
 
 There is no limit to the number of parameters accepted by the function, they can even be accepted dynamically using code such as this: 
