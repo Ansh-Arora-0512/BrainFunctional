@@ -17,7 +17,7 @@ However, unlike many features of brainfuck, it is a powerful and versatile tool 
 So let's jump into the syntax.
 
 ## The Commands
-This table provides a very basic overview of the 12 commands involved (including the 8 commands from original brainfuck), so for a more in depth guide and in order to understand the exact behaviour of each command, keep reading.
+This table provides a very basic overview of the 12 commands involved (including the 8 commands from original brainfuck), so for a more in-depth guide and in order to understand the exact behaviour of each command, keep reading.
 
 Command | Description
 --- | ---
@@ -38,3 +38,9 @@ Code stored inside uses its own local memory space, or local scope.
 
 Functions can't interact with the console - they can only take parameters and return values. The only exception to this rule is with the `.` command, which we'll elaborate on later.
 
+###### Taking Parameters
+Parameters are input into the function with ","
+
+There is no limit to the number of parameters accepted by the function, they can even be accepted dynamically using code such as this: 
+```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,<+]}```
+In which the first parameter decides how many parameters will be required by the function.
