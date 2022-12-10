@@ -34,7 +34,7 @@ Command | Description
 `(` | Indicates the start of a function call. Within function calls, special rules apply to the `.` and `,` commands
 `)` | Indicates the end of a function call
 `/` | "Cuts" a function, deleting it and allowing it to be moved elsewhere in the memory
-`*` | "Pastes" a function, allowing it to be stored in that position in the memory
+`*` | "Pastes" a function, allowing it to be stored in that position in the cell at the pointer
 
 ## Defining a Function
 Functions are wrapped with curly brackets: `{}`.
@@ -50,9 +50,9 @@ There is no limit to the number of parameters accepted by the function, they can
 
 ```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,<+]}```
 
-In which the first parameter decides how many parameters will be required by the function.
+In which the first argument decides how many parameters will be required by the function.
 
-Since functions have their own local scope, `,` determines where parameters are stored in the function, as if the function were a normal piece of brainfuck code and the parameters were `stdin`.
+Since functions have their own local scope, `,` determines where arguments are stored in the function's scope, as if the function were a normal piece of brainfuck code and the arguments were `stdin`.
 
 ### Returning values (or functions)
 Functions can return values with `.`.
@@ -64,3 +64,63 @@ Much like with the parameters, any number of values can be output and this is do
 In which each parameter other than the first (which determines the number of parameters) is incremented by 1 and then returned.
 
 ## Calling Functions
+Functions are stored in the memory like bytes and can be called using circular brackets: `()`.
+
+Code within the circular brackets determines how parameters are passed to the function and how returned values are stored
+
+Function calls (code wrapped in circular braces) can't interact with the console - they can only pass parameters to the function and handle return values. They can however access modular memory (but not the function's local memory) to pass parameters and store returned values.
+
+### Passing Arguments
+Arguments are passed to the function call with `.`.
+
+Arguments can be passed dynamically to the function much like they are retrieved. For example, making use of our function from earlier:
+
+```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,<+]}>+++>+>+>+<<<<(>.>[.>])```
+
+This code simply stores the function, 3, 1, 1 and 1 in the memory. Then the function is called and the first argument is introduced `3`. This parameter tells the function how many more arguments to accept (3). The function call loops through the modular memory and passes every value in the (not yet) covered memory to the function till it hits 0. There are 3 more values in the memory till 0, the exact number of values our function demands, so these values (1, 1 and 1) are passed to the function.
+
+Functions are not stored in each others' local scopes, however they can accept themselves and other functions as parameters, allowing for callback functions and recursion (I dare you to make use of this reader).
+
+If too many or too few parameters are passed to the function, an error will be raised. Also, note, unless you hope to use recursion within the program, don't pass the value at the cell the pointer is at at the start of the function call. For example, if you wish to pass 1 as an argument, don't do `(+.)`, as this will pass a decorated version of the function to itself as a parameter. This quite obvious and an intended feature, but at times also easy to forget about, resulting in some unusual bugs.
+
+### Handling Returns
+Returned values are retrieved from the function with `,`.
+
+As with every other feature of brainfuck functions, returned values are handled with their own little snippet of brainfuck code which allows the most control over data that brainfuck has to offer. For example:
+
+```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,+.<+]}}>+++>+>+>+<<<<(>.>[.>]+[>,])```
+Basically, returned values are saved in their own little memory space/array which is appended to by the function each time `.` is used within the function and is stored to modular memory each time `,` is used within the function call. Each time a returned value is pulled from the function, the pointer of the returned array is incremented by one, and the next time `,` is used within the function call, the next returned value is pulled. Not all returned values have to be pulled and if there are more pulls than returns, 0 gets pulled. So if (in this example) the fourth returned value is requested but only 3 values are returned by the function, the fourth value returned will be 0. In our example, this will end the loop, so all values returned by the function (1,1,1) will be saved to the modular memory till one of these values is 0.
+
+Returned values can replace a function in the memory and the function will still run. The function will only cease to exist after the function call is complete. However note that the function will not exist in the modular memory, so it will not be callable again within the function call and it can't be passed to the function as a parameter (allowing recursion) if it is deleted first.
+
+Evaluation of the function call is handled somewhat lazily but also in a weird fashion, so function calls are executed twice. In the first execution returned values are ignored and only parameters are taken into account and evaluated. It is, of, course, ensured that none of the parameters is a manipulation of a returned value from the function (as this would result in unexpected behaviour) by raising an error in this scenario. In the second evaluation, parameters are ignored and only returned values are evaluated.
+
+Though you have the option to do some disgusting function calls, such as `(.,<,>>.<<.)` or something of the sort, please do not. It is recommended to pass all arguments to the function within the call before handling returns. If it increases functionality not to do so then go ahead, but for the sake of your own mental health it is not recommended. After all, this is BrainFunctional not Brainfuck.
+
+## Other Commands
+Functions can be called when the pointer is on their location in the memory, however, if they are not called and rather normal brainfuck operations are performed on them then other things happen.
+
+If the pointer is on a function and rather than calling this function, `.` is used to output the function, then the function is evaluated on the spot as if it were a normal piece of code. This means that rather than `,` (from inside the function) being an input for a parameter, `,` is used as an input from the console. Similarly, `.` (from within the function) will not serve to return values (or functions) but instead will output values to the console. The function will also not use it's own local scope and will instead access modular memory for that one evaluation, resulting in potentially buggy code if `.` is used instead of a function call and data in the memory is overwritten.
+
+Functions are detected by `[` and `]` as not being equal to zero.
+
+Taking inputs at a modular level with `,` in a cell where a function exists will overwrite the function, replacing it with data input by the user.
+
+### Decorators
+`+` and `-` can serve somewhat as decorators for the function, in the sense that they modify the values returned by the function. `+` being used on a function (not a function call, remember) means that later when a function is called, `+` will be used on every value returned by a function. So, for example, we have a function that returns 1, 2 and 3. Using `+` on this function means that when its called, it will return 2, 3 and 4 instead. Below is a demonstration.
+
+```{+.>++.>+++.}+```
+
+`-` does the same as `+` when acting on a function, but it subtracts 1 instead of adding 1.
+	• The real use of this decorator idea is when functions are used to decorate other functions, as is the case in higher level languages. In this case, if a function is written on top of another function, that function serves to decorate that function.
+	• When one function is written on top of another, each time the resulting function is called only the top layer function is called, but the top function is modified in the sense that it's first few parameter are replaced by the returned values of the function it decorates. The decorated function's parameters are input first. What we get is a combination of both functions. So if we have one function that doubles a number:
+{,[->+>+<<]>[->+<]>.}
+	and another function on top of this that triples a given parameter
+{,[->+>+>+<<<]>[->+<]>[->+<]>.}
+	then these functions chained together with the tripling function on top will look like this
+{,[->+>+<<]>[->+<]>.}{,[->+>+>+<<<]>[->+<]>[->+<]>.}
+	Our new function will calculate the triple of the values returned by our doubling function, so together they will return a given parameter multiplied by 6.
+	• The total number of parameters given to the decorated function =
+	the number of parameters accepted by the decorated function - the number of values the decorated function returns + the number parameters for the decorator.
+	• I will now translate the geeksforgeeks python decorators example using brainfuck (or should I say brainfunc?) instead.
+![image](https://user-images.githubusercontent.com/115102671/206873787-1a35d273-0105-49d3-87fd-a995d1584a76.png)
