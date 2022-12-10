@@ -8,7 +8,7 @@ We bring to you simple, scalable brainfuck! Ok no. That was a lie to get your at
 ## What is it?
 Brainfuck but with functions.
 
-If you have no idea what brainfuck is but for some reason are still reading this, here is a [wikepedia article]([url](https://en.wikipedia.org/wiki/Brainfuck)) explaining the fundamentals of the esoteric programming language. I will not be exploring how to use brainfuck or going over it in this guide, so if you don't understand some of the examples given or want another guide on the language, here is a [tutorial]([url](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a)) by @roachhd, which covers some of the fundamentals quite well.
+If you have no idea what brainfuck is but for some reason are still reading this, here is a [wikepedia article](https://en.wikipedia.org/wiki/Brainfuck) explaining the fundamentals of the esoteric programming language. I will not be exploring how to use brainfuck or going over it in this guide, so if you don't understand some of the examples given or want another guide on the language, here is a [tutorial](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a) by @roachhd, which covers some of the fundamentals quite well.
 
 The syntax is minimalistic, simple and impractical, following the fundamentals of the language.
 
@@ -16,7 +16,7 @@ However, unlike many features of brainfuck, it is a powerful and versatile tool 
 
 So let's jump into the syntax.
 
-By the way, if you haven't figured it out yet, the only reason I use the horrible name "BrainFunctional" is because [Brainfunc]([url](https://esolangs.org/wiki/Brainfunc)) and [Brainfunction]([url](https://github.com/ryanfox/brainfunction)) already exist.
+By the way, if you haven't figured it out yet, the only reason I use the horrible name "BrainFunctional" is because [Brainfunc](https://esolangs.org/wiki/Brainfunc) and [Brainfunction](https://github.com/ryanfox/brainfunction) already exist.
 
 ## The Commands
 This table provides a very basic overview of the 14 commands involved (including the 8 commands from original brainfuck), so for a more in-depth guide and in order to understand the exact behaviour of each command, keep reading.
@@ -133,7 +133,7 @@ Our new function will calculate the triple of the values returned by our doublin
 _The total number of parameters given to the decorated function =
 the number of parameters accepted by the decorated function - the number of values the decorated function returns + the number parameters for the decorator._
 
-I will now translate the [geeksforgeeks python decorators example]([url](https://www.geeksforgeeks.org/decorators-in-python/)) using BrainFunctional instead.
+I will now translate the [geeksforgeeks python decorators example](https://www.geeksforgeeks.org/decorators-in-python/) using BrainFunctional instead.
 
 <u>Python 3</u>:
 ```python
