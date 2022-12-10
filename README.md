@@ -188,7 +188,7 @@ Note that if one function is cut and then another is function is cut, the first 
 
 Here is the example from above rewritten so that the hello_decorator decorator can also be used on a function to double inputs (called doubler):
 
-```bf
+```brainfuck
 {,>,[-<+>]<.} sum_two_numbers 
 >--[----->+<]>---- "b" we can use - on this to convert it to "a"
 Because this is brainfuck, I will not store the strings "before Execution" and "after Execution", but will denote them with "b" and "a" instead. This letter will also be input to the hello decorator function for simplicity's sake.
