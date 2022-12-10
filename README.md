@@ -39,8 +39,13 @@ Code stored inside uses its own local memory space, or local scope.
 Functions can't interact with the console - they can only take parameters and return values. The only exception to this rule is with the `.` command, which we'll elaborate on later.
 
 ###### Taking Parameters
-Parameters are input into the function with ","
+Parameters are input into the function with `,`
 
 There is no limit to the number of parameters accepted by the function, they can even be accepted dynamically using code such as this: 
+
 ```{->,[->+>+<<]>>[-<<+>>]<-[[->+<]>-]+[,<+]}```
+
 In which the first parameter decides how many parameters will be required by the function.
+
+Since functions have their own local scope, `,` determines where parameters are stored in the function, as if the function were a normal piece of brainfuck code and the parameters were `stdin`.
+
