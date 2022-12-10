@@ -38,7 +38,7 @@ Code stored inside uses its own local memory space, or local scope.
 
 Functions can't interact with the console - they can only take parameters and return values. The only exception to this rule is with the `.` command, which we'll elaborate on later.
 
-#### Taking Parameters
+### Taking Parameters
 Parameters are input into the function with `,`
 
 There is no limit to the number of parameters accepted by the function, they can even be accepted dynamically using code such as this: 
