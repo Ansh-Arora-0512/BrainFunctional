@@ -25,8 +25,8 @@ Command | Description
 --- | ---
 `>` |	Move the pointer to the right
 `<`	| Move the pointer to the left
-`+` | Increment the memory cell at the pointer if it is a byte, otherwise decorates the function at the pointer by incrementing the values returned
-`-`	| Decrement the memory cell at the pointer if it is a byte, otherwise decorates the function at the pointer by decrementing the values returned
+`+` | Increment the memory cell at the pointer. If the cell is a function, overwrite it with 1
+`-`	| Decrement the memory cell at the pointer. If the cell is a function, overwrite it with 255
 `.`	| Output the character signified by the cell at the pointer if it is a byte, otherwise executes the function at the pointer as if it were a set of ordinary brainfuck commands
 `,`	| Input a character and store it in the cell at the pointer
 `[`	| Jump past the matching `]` if the cell at the pointer is 0 (functions are considered to be nonzero)
@@ -35,8 +35,6 @@ Command | Description
 `}` | Indicates the end of a function. Within functions, special rules apply to the `.` and `,` commands
 `(` | Indicates the start of a function call. Within function calls, special rules apply to the `.` and `,` commands
 `)` | Indicates the end of a function call
-`/` | "Cuts" a function, deleting it and allowing it to be moved elsewhere in the memory
-`*` | "Pastes" a function, allowing it to be stored in that position in the cell at the pointer
 
 ## Defining a Function
 Functions are wrapped with curly brackets: `{}`.
@@ -117,15 +115,19 @@ Functions are detected by `[` and `]` as not being equal to zero.
 
 Taking inputs at a modular level with `,` in a cell where a function exists will overwrite the function, replacing it with data input by the user.
 
-### Decorators
-`+` and `-` can serve somewhat as decorators for the function, in the sense that they modify the values returned by the function. `+` being used on a function (not a function call, remember) means that later when a function is called, `+` will be used on every value returned by a function. So, for example, we have a function that returns 1, 2 and 3. Using `+` on this function means that when its called, it will return 2, 3 and 4 instead. Below is a demonstration.
+### Moving and Deleting Functions
+`+` and `-` overwrite (therefore deleting) functions from the memory. When `+` or `-` act on the function, it is treated as an empty cell, so `+` replaced the function with 1 and `-` replaces it with 255.
 
+We can use one function to move another in the memory. This mechanic works due to the way functions allow us to return functions as objects and input them in function calls.
+
+Here's an example of these two techniques.
 ```brainfuck
-{+.>++.>+++.}+
+{,[->+>+<<]>[->+<]>.} This function returns the double of a given parameter
+>{,.} This function allows us to return a function and store it wherever is needed
+(<.-+>-+,) This function call copies the first funtion, deletes both functions and then moves the first function to the second cell
 ```
 
-`-` does the same as `+` when acting on a function, but it subtracts 1 instead of adding 1.
-
+### Decorators
 The real use of this decorator idea is when functions are used to decorate other functions, as is the case in higher level languages. In the case of BrainFunctional, if a function is written on top of another function, that function serves to decorate the original function.
 
 When one function is written on top of another, each time the resulting function is called only the top layer function is called, but the top function is modified in the sense that it's first few parameter are replaced by the returned values of the function it decorates. The decorated function's parameters are input first. What we get is a combination of both functions. So if we have one function that doubles a number:
@@ -196,15 +198,7 @@ Outputs the decorated function taking 1 and 2 as parameters.
 The python equivalent of this would be: print(sum_two_numbers(1, 2))
 ```
 
-### Moving Functions in the Memory
-As you can see, the BrainFunctional version is a lot more simple and concise but with more brainfucking potential. Of course, you're not really going to be able to chain decorators or reuse decorators or use them practically using the methods shown above, since the decorator doesn't exist as a separate function in the memory - it is simply written on top of our original function to form a combination of the 2.
-
-To move functions around in the memory, I propose a copy-paste like mechanism with `/` being used to cut a function (delete it and copy it to a clipboard of sorts where it can be pasted to any other space in the memory at any time) and `*` to paste a function (place a function from the clipboard onto a spot in the memory as if the code for that function had been written there).
-
-Note that if one function is cut and then another is function is cut, the first function will be overwritten in (therefore removed from) the clipboard
-
-Here is the example from above rewritten so that the hello_decorator decorator can also be used on a function to double inputs (called doubler):
-
+Here's an example of BrainFuck code with a few more caveats and including the movement of functions, giving us a practical use for decorators:
 ```brainfuck
 {,>,[-<+>]<.} sum_two_numbers 
 >--[----->+<]>---- "b" we can use - on this to convert it to "a"
@@ -214,7 +208,7 @@ Because this is brainfuck, I will not store the strings "before Execution" and "
 Accepts an unlimited number of parameters till a given parameter is equal to 0, and then returns the double of all parameters given
 
 >{,>,.<.>-.} hello_decorator
-/*<*<<*
+<{,[.]}(>.<,<<,)
 Clones hello_decorator on top of sum_two_numbers and doubler, causing it to act as a decorator for both
 
 (<+.+.-->>.<<,<,<,)>>.<.<.
@@ -229,11 +223,7 @@ Note that in this example "3" and "10" won't really be output due to the way out
 ```
 
 ## Thoughts and Concerns
-The interactions of `.`, `-` and `+` with functions is an idea I am unsure of. It adds to the versatility of functions and makes them more interactive, but it feels quintessentially unbrainfucky (yes I just made that word up). This feeling arises from the idea that the base brainfuck funtions can perform 2 completely different tasks. This idea just doesn't sit well with classic brainfuck. This is my biggest concern.
-
-2 other alternatives could be that these operations do nothing when acting on a functions, or that they raise an error.
-
-The overall implementation of decorators is a rocky idea, since decorators are a higher level concept used in object oriented programming. Brainfuck is most definitely not high-level or object oriented, though functions are considered as objects in brainfunc and are handled in a way that is at least somewhat object oriented. But including decorators when there isn't even an implementation for classes? Of course, implementing classes to brainfuck will change the language immeasurably and completely break away from it. Class objects are probably the most unbrainfucky idea anyone could come up with, so there is no way BrainFunctional will include them or anything similar.
+The implementation of decorators is, I feel, a rocky idea, since decorators are a higher level concept used in object oriented programming. Brainfuck is most definitely not high-level or object oriented, though functions are considered as objects in brainfunc and are handled in a way that is at least somewhat object oriented. But including decorators when there isn't even an implementation for classes? Of course, implementing classes to brainfuck will change the language immeasurably and completely break away from it. Class objects are probably the most unbrainfucky idea anyone could come up with, so there is no way BrainFunctional will include them or anything similar.
 
 The pros of implementing decorators is that - unlike in other languages where they don't serve too much purpose (and are a little like syntactic sugar) - in BrainFunctional (due to the low-level handling of functions), decorators actually serve a unique role, and without their existence there is no real way to implement what they do in a versatile and dynamic manner. Therefore I feel like they have to stay.
 
