@@ -120,12 +120,18 @@ Taking inputs at a modular level with `,` in a cell where a function exists will
 
 We can use one function to move another in the memory. This mechanic works due to the way functions allow us to return functions as objects and input them in function calls.
 
-Here's an example of these two techniques.
+Here's an example of these two techniques:
 ```brainfuck
 {,[->+>+<<]>[->+<]>.} This function returns the double of a given parameter
 >{,.} This function allows us to return a function and store it wherever is needed
 (<.-+>-+,) This function call copies the first funtion, deletes both functions and then moves the first function to the second cell
 ```
+
+In this example, we used `{,.}`, which allows us to copy the input function. However, `{,.}` only returns one value, meaning that it can only produce one copy of a function if used once. To copy a function an unlimited number of times, it is recommended to use:
+```brainfuck
+{,[.]}
+```
+Which yields as many copies of the functions as the player wishes to accept with the function call.
 
 ### Decorators
 The real use of this decorator idea is when functions are used to decorate other functions, as is the case in higher level languages. In the case of BrainFunctional, if a function is written on top of another function, that function serves to decorate the original function.
