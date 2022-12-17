@@ -19,7 +19,7 @@ So let's jump into the syntax.
 By the way, if you haven't figured it out yet, the only reason I use the horrible name "BrainFunctional" is because [Brainfunc](https://esolangs.org/wiki/Brainfunc) and [Brainfunction](https://github.com/ryanfox/brainfunction) already exist.
 
 ## The Commands
-This table provides a very basic overview of the 14 commands involved (including the 8 commands from original brainfuck), so for a more in-depth guide and in order to understand the exact behaviour of each command, keep reading.
+This table provides a very basic overview of the 12 commands involved (including the 8 commands from original brainfuck), so for a more in-depth guide and in order to understand the exact behaviour of each command, keep reading.
 
 Command | Description
 --- | ---
