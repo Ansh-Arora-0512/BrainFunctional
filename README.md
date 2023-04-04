@@ -68,7 +68,7 @@ Much like with the parameters, any number of values can be output and this is do
 In which each parameter other than the first (which determines the number of parameters) is incremented by 1 and then returned.
 
 ## Calling Functions
-Functions are stored in the memory like bytes and can be called using circular brackets: `()`.
+Functions are stored in the memory in the same manner as bytes and can be called using circular brackets: `()`.
 
 Code within the circular brackets determines how parameters are passed to the function and how returned values are stored
 
@@ -87,7 +87,7 @@ This code simply stores the function, 3, 1, 1 and 1 in the memory. Then the func
 
 Functions are not stored in each others' local scopes, however they can accept themselves and other functions as parameters, allowing for callback functions and recursion (I dare you to make use of this reader).
 
-If too many or too few parameters are passed to the function, an error will be raised. Also, note, unless you hope to use recursion within the program, don't pass the value at the cell the pointer is at at the start of the function call. For example, if you wish to pass 1 as an argument, don't do `(+.)`, as this will pass a decorated version of the function to itself as a parameter. This quite obvious and an intended feature, but at times also easy to forget about, resulting in some unusual bugs.
+If too many or too few parameters are passed to the function, an error will be raised. Also, note, unless you hope to use recursion within the program, don't pass the value at the cell the pointer is at at the start of the function call. For example, if you wish to pass 0 as an argument, don't do `(.)`, as this will pass the function to itself as a parameter. This quite obvious and an intended feature, but at times also easy to forget about, resulting in some unusual bugs. Suitable alternatives could be `(>[-].<)`. You may also choose to do `(+-.)` but this will erase the function from memory and prevent it's further use. Note that the function will continue to run even after it has been destroyed, but at the end of the function call it will cease to exist (unless you've stored a copy elsewhere).
 
 ### Handling Returns
 Returned values are retrieved from the function with `,`.
