@@ -134,7 +134,7 @@ In this example, we used `{,.}`, which allows us to copy the input function. How
 Which yields as many copies of the functions as the player wishes to accept with the function call.
 
 ### Decorators
-The real use of this decorator idea is when functions are used to decorate other functions, as is the case in higher level languages. In the case of BrainFunctional, if a function is written on top of another function, that function serves to decorate the original function.
+Decorators. An uncharacteristically high-level idea for brainfuck, and probably a bad one too. In the case of BrainFunctional, if a function is written on top of another function, that function serves to decorate the original function.
 
 When one function is written on top of another, each time the resulting function is called only the top layer function is called, but the top function is modified in the sense that it's first few parameter are replaced by the returned values of the function it decorates. The decorated function's parameters are input first. What we get is a combination of both functions. So if we have one function that doubles a number:
 
